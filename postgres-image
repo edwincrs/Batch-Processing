@@ -1,0 +1,26 @@
+version: '2'
+services:
+  postgres-db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: metabase
+    volumes:
+    - "postgres_data:/var/lib/postgresql/data"  # docker volume create postgres_data
+    ports:
+    - 5433:5432/tcp
+  webserver:
+    image:flask_example
+    environment:
+      MB_DB_HOST: postgres-db
+      MB_DB_DBNAME: metabase
+      MB_DB_USER: postgres
+      MB_DB_PASS: admin
+      MB_DB_PORT: 5432
+    ports:
+    - 5000:5000/tcp
+volumes:
+    postgres_data:
+      external: true
